@@ -1,14 +1,28 @@
 // write your code here
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetchRamen();
+    fetchRamens();
     newRamen();
 })
 
-function fetchRamen() {
+function fetchRamens() {
     fetch('http://localhost:3000/ramens')
     .then(response => response.json())
-    .then(ramens => ramens.forEach(ramen => renderRamen(ramen)))
+    .then(ramens => {
+        const details = document.querySelector('#ramen-detail');
+        const img = details.querySelector('.detail-image');
+        img.src = ramens[0].image;
+        const h2 = details.querySelector('.name');
+        h2.textContent = ramens[0].name;
+        const h3 = details.querySelector('.restaurant');
+        h3.textContent = ramens[0].restaurant;
+        const rating = document.querySelector('#rating-display');
+        rating.textContent = ramens[0].rating;
+        const comment = document.querySelector('#comment-display');
+        comment.textContent = ramens[0].comment;
+
+        ramens.forEach(ramen => renderRamen(ramen));
+    })  
 }
 
 function renderRamen(ramen) {
@@ -58,6 +72,6 @@ function newRamen() {
             })
         })
         .then(response => response.json())
-        .then(data => data)
+        .then(data => renderRamen(data))
     })
 }
