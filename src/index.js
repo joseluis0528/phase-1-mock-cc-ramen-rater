@@ -2,12 +2,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchRamen();
+    newRamen();
 })
 
 function fetchRamen() {
     fetch('http://localhost:3000/ramens')
     .then(response => response.json())
-    .then(ramens => console.log(ramens.forEach(ramen => renderRamen(ramen))))
+    .then(ramens => ramens.forEach(ramen => renderRamen(ramen)))
 }
 
 function renderRamen(ramen) {
@@ -29,5 +30,34 @@ function renderRamen(ramen) {
         rating.textContent = ramen.rating;
         const comments = document.querySelector('#comment-display');
         comments.textContent = ramen.comment;
+    })
+}
+
+function newRamen() {
+    const getForm = document.querySelector('#new-ramen');
+    const name = getForm.querySelector('#new-name');
+    const restaurant = getForm.querySelector('#new-restaurant');
+    const img = getForm.querySelector('#new-image');
+    const rating = getForm.querySelector('#new-rating');
+    const comment = getForm.querySelector('#new-comment');
+    const getButton = getForm.querySelectorAll('input')[4];
+    getButton.addEventListener('click', () => {
+        fetch('http://localhost:3000/ramens', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                id: '',
+                name: name.value,
+                restaurant: restaurant.value,
+                image: img.value,
+                rating: rating.value,
+                comment: comment.value,
+            })
+        })
+        .then(response => response.json())
+        .then(data => data)
     })
 }
